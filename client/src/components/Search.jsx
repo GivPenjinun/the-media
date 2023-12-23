@@ -2,7 +2,7 @@ import React from "react";
 
 const Search = () => {
   return (
-    <div>
+    <div className="w-full flex justify-center">
       <form className="flex items-center gap-3">
         <h4>Category:</h4>
         <div className="flex items-center gap-1">

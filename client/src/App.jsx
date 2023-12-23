@@ -4,11 +4,9 @@ import Home from "./pages/Home";
 import BlogPage from "./pages/BlogPage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import { faMusic } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import WriterProfile from "./pages/WriterProfile";
 
 function App() {
-  //<FontAwesomeIcon icon={faMusic} />
   return (
     <>
       <Router>
@@ -19,9 +17,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Home />} />
           <Route path="/writer">
-            <Route path="/writer/profile/:writerId" element="" />
+            <Route
+              path="/writer/profile/:writerId"
+              element={<WriterProfile />}
+            />
             <Route path="/writer/allworks/:writerId" element="" />
-            <Route path="/writer/write" element="" />
+            <Route path="/writer/writepost" element="" />
             <Route path="/writer/follower" element="" />
           </Route>
           <Route path="/reader">

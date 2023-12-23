@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Register = () => {
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validate Name
+    if (username.length < 6 || username.length > 20) {
+      newErrors.username = "Username must be between 6 and 20 characters";
+      let input = document.getElementById(`userName`);
+      input.classList.add("border-red-500");
+    } else {
+      let input = document.getElementById(`userName`);
+      input.classList.remove("border-red-500");
+    }
+
+    // Validate Email
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!email.match(emailPattern)) {
+      newErrors.email = "Invalid email format";
+      let input = document.getElementById(`email`);
+      input.classList.add("border-red-500");
+    } else {
+      let input = document.getElementById(`email`);
+      input.classList.remove("border-red-500");
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   return (
     <div className="bg-gradient-to-b from-cyan-500 to-blue-500 w-screen h-screen flex flex-col gap-3 justify-center items-center">
       <h2 className="text-headLine3">Register</h2>

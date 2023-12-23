@@ -1,16 +1,19 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import SideBarWriter from "../components/SideBarWriter";
+import Profile from "../components/Profile";
 
 const WriterProfile = () => {
   return (
-    <div className="w-screen h-auto flex flex-row justify-center ">
-      <SideBarWriter />
-      <div className=" w-5/6 h-auto flex flex-col items-center ">
-        <NavBar />
-        <div className="min-h-[90%] w-full px-14 flex flex-col pt-4 pb-14 bg-[#F6F6F9]"></div>
+    <>
+      <NavBar />
+      <div className="w-screen h-auto flex flex-row justify-center ">
+        <SideBarWriter />
+        <div className=" w-5/6 h-auto shadow-custom4 rounded-md mr-20 mb-20 p-5">
+          <Profile />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

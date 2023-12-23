@@ -7,10 +7,10 @@ const NavBar = () => {
   return (
     <>
       <nav className="py-5 px-10 flex justify-between items-center">
-        <img src={logo} className="w-[150px] h-[75px]" />
-        <div className="">
-          <Search />
-        </div>
+        <Link className="link" to="/">
+          <img src={logo} className="w-[150px] h-[75px]" />
+        </Link>
+
         <div className="flex gap-8">
           <Link className="link" to="/login">
             Login
