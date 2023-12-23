@@ -5,6 +5,10 @@ import BlogPage from "./pages/BlogPage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import WriterProfile from "./pages/WriterProfile";
+import WritePost from "./pages/WritePost";
+import Allworks from "./pages/Allworks";
+import ReaderProfile from "./pages/ReaderProfile";
+import FavPosts from "./pages/FavPosts";
 
 function App() {
   return (
@@ -21,13 +25,16 @@ function App() {
               path="/writer/profile/:writerId"
               element={<WriterProfile />}
             />
-            <Route path="/writer/allworks/:writerId" element="" />
-            <Route path="/writer/writepost" element="" />
+            <Route path="/writer/allworks/:writerId" element={<Allworks />} />
+            <Route path="/writer/writepost" element={<WritePost />} />
             <Route path="/writer/follower" element="" />
           </Route>
           <Route path="/reader">
-            <Route path="/reader/profile/:readerId" element="" />
-            <Route path="/reader/favpost/:readerId" element="" />
+            <Route
+              path="/reader/profile/:readerId"
+              element={<ReaderProfile />}
+            />
+            <Route path="/reader/favposts/:readerId" element={<FavPosts />} />
             <Route path="/reader/following/:readerId" element="" />
           </Route>
         </Routes>

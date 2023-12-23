@@ -1,10 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Profile = () => {
   const [errors, setErrors] = useState({});
   const handleSubmit = () => {};
+
+  const currentURL = window.location.href;
+  const checkURL = () => {
+    if (currentURL.includes("writer")) {
+    }
+    if (currentURL.includes("reader")) {
+    }
+  };
+
+  useEffect(() => {
+    checkURL();
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-10">
