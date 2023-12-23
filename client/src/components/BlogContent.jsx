@@ -1,5 +1,5 @@
 import React from "react";
-import dog from "../../public/dog-bobo.jpg";
+import dog from "../assets/dog-bobo.jpg";
 import Suggest from "./Suggest";
 
 const BlogContent = () => {

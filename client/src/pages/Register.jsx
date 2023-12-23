@@ -16,6 +16,13 @@ const Register = () => {
         <input
           className="text-body1 rounded-md p-2 focus:outline-none"
           required
+          placeholder="username"
+          type="username"
+          name="username"
+        />
+        <input
+          className="text-body1 rounded-md p-2 focus:outline-none"
+          required
           placeholder="password"
           type="password"
           name="password"

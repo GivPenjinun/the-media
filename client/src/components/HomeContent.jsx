@@ -1,5 +1,5 @@
 import React from "react";
-import dog from "../../public/dog-bobo.jpg";
+import dog from "../assets/dog-bobo.jpg";
 
 const HomeContent = () => {
   return (
@@ -15,12 +15,13 @@ const HomeContent = () => {
               dolore ad. Dicta et architecto quaerat, ipsam sapiente numquam
               officia cumque voluptates delectus quod.
             </p>
-            <button className="rounded-md p-1 border-2 border-primaryBlue1 bg-primaryBlue2">
+            <button className="rounded-md p-1 border-2 border-primaryBlue1 hover:bg-primaryBlue2">
               Read More
             </button>
           </div>
-          <div className=" w-1/3">
-            <img src={dog} alt="" className="w-full h-[350px]" />
+          <div className=" w-1/3 relative ">
+            <img src={dog} alt="" className="w-full h-[350px] " />
+            <div className="w-full h-[350px] bg-primaryBlue2 absolute top-4 left-4 -z-10"></div>
           </div>
         </div>
       </main>
