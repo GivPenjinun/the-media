@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const Write = () => {
+  const [value, setValue] = useState("");
+
   return (
     <div className="flex flex-col gap-5">
       <input
@@ -9,16 +13,11 @@ const Write = () => {
         type="text"
         placeholder="title"
         //onChange={handleFileChange}
-        className="border-primaryGray5 border-2 rounded-lg w-full  mt-2 text-primaryGray2 p-2 focus:outline-none focus:border-primaryBlue2"
+        className="border-primaryGray5 border-2 rounded-lg w-full  mt-2 text-primaryGray2 p-2 focus:outline-none "
       />
-      <input
-        id="upload"
-        name="photo"
-        type="file"
-        //onChange={handleFileChange}
-      />
+
       <form className="flex items-center gap-3">
-        <h4 className="text-headLine4">Category:</h4>
+        <h4 className="font-bold">Category:</h4>
         <div className="flex items-center gap-1">
           <input
             type="radio"
@@ -80,22 +79,34 @@ const Write = () => {
           <label htmlFor="technology">Technology</label>
         </div>
       </form>
-      <textarea
-        rows={10}
-        type="text"
-        id="content"
-        name="content"
-        placeholder="write content"
-        className="border-primaryGray5 border-2 rounded-lg w-full  mt-2 text-primaryGray2 p-2 focus:outline-none focus:border-primaryBlue2"
-      />
+      <div className="w-full min-h-[350px] ">
+        <ReactQuill
+          theme="snow"
+          value={value}
+          onChange={setValue}
+          className="editor"
+        />
+      </div>
+      <div className="flex gap-5">
+        <label htmlFor="file" className="font-bold">
+          Upload Image
+        </label>
+        <input
+          id="file"
+          name="photo"
+          type="file"
+
+          //onChange={handleFileChange}
+        />
+      </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-headLine3">Publish</h2>
 
         <p>
-          <span className="text-headLine4">Status:</span> Draft
+          <span className="font-bold">Status:</span> Draft
         </p>
         <p>
-          <span className="text-headLine4">Visibility:</span> Public
+          <span className="font-bold">Visibility:</span> Public
         </p>
         <div className="flex gap-4">
           <button className="py-1 px-2 border-2 border-primaryBlue1 hover:bg-primaryBlue2 bg-white">
