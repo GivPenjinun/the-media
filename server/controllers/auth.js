@@ -1,5 +1,6 @@
 import { db } from "../db.js";
 import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from "uuid";
 //import jwt from "jsonwebtoken";
 
 export const registerWriter = (req, res) => {
@@ -13,9 +14,10 @@ export const registerWriter = (req, res) => {
     //Hash the password and create a user
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
-
-    const q = "INSERT INTO writers(`username`,`email`,`password`) VALUES (?)";
-    const values = [req.body.username, req.body.email, hash];
+    const id = uuidv4();
+    const q =
+      "INSERT INTO writers(`writer_id`,`username`,`email`,`password`) VALUES (?)";
+    const values = [id, req.body.username, req.body.email, hash];
 
     db.query(q, [values], (err, data) => {
       if (err) return res.status(500).json(err);

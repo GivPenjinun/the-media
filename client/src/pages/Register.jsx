@@ -46,7 +46,8 @@ const Register = () => {
       await axios.post("http://localhost:8800/auth/registerWriter", inputs);
       navigate("/login");
     } catch (err) {
-      // setErrors((prev) => ({ ...prev, err: err.response.data }));
+      err.response.data &&
+        setErrors((prev) => ({ ...prev, err: err.response.data }));
       console.log(err);
     }
   };
@@ -88,16 +89,18 @@ const Register = () => {
           <p className="mt-2 text-sm text-red-600">{errors.password}</p>
         )}
         {/*<input type="file" required />*/}
-        <button
-          onClick={handleSubmit}
-          type="submit"
-          className="w-full py-2 px-4 text-headLine4 bg-gradient-to-r rounded-full drop-shadow-md from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 "
-        >
-          Register
-        </button>
-        {errors.err && (
-          <p className="mt-2 text-sm text-red-600">{errors.err}</p>
-        )}
+        <div className="">
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="w-full py-2 px-4 text-headLine4 bg-gradient-to-r rounded-full drop-shadow-md from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 "
+          >
+            Register
+          </button>
+          {errors.err && (
+            <p className="mt-2 text-sm text-red-600">{errors.err}</p>
+          )}
+        </div>
 
         <span className="">
           You already have an account?{" "}
