@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../assets/logo.png";
 import Search from "./Search";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 
 const NavBar = () => {
+  const { currentUser, logout } = useContext(AuthContext);
   return (
     <>
       <nav className="py-5 px-10 flex justify-between items-center">
@@ -12,9 +14,13 @@ const NavBar = () => {
         </Link>
 
         <div className="flex gap-8">
-          <Link className="link" to="/login">
-            Login
-          </Link>
+          {currentUser ? (
+            <button onClick={logout}>Logout</button>
+          ) : (
+            <Link className="link" to="/login">
+              Login
+            </Link>
+          )}
           <Link className="link" to="/write">
             Write
           </Link>

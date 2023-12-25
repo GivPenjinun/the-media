@@ -42,6 +42,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    //if (validateForm()){}
     try {
       await axios.post("http://localhost:8800/auth/registerWriter", inputs);
       navigate("/login");

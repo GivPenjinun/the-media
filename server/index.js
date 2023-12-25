@@ -2,11 +2,12 @@ import express from "express";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import cors from "cors";
-import { v4 as uuidv4 } from "uuid";
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/posts", postRoutes);
 app.use("/auth", authRoutes);
