@@ -1,34 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const [errors, setErrors] = useState({});
+  const [inputs, setInputs] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Validate Name
-    if (username.length < 6 || username.length > 20) {
+    // Validate Username
+    if (inputs.username.length < 6 || inputs.username.length > 20) {
       newErrors.username = "Username must be between 6 and 20 characters";
-      let input = document.getElementById(`userName`);
-      input.classList.add("border-red-500");
-    } else {
-      let input = document.getElementById(`userName`);
-      input.classList.remove("border-red-500");
     }
 
     // Validate Email
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!email.match(emailPattern)) {
+    if (!inputs.email.match(emailPattern)) {
       newErrors.email = "Invalid email format";
-      let input = document.getElementById(`email`);
-      input.classList.add("border-red-500");
-    } else {
-      let input = document.getElementById(`email`);
-      input.classList.remove("border-red-500");
     }
+
+    // Validate Password
+    if (inputs.password.length < 6 || inputs.password.length > 20) {
+      newErrors.password = "Password must be between 6 and 20 characters";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    validateForm();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("http://localhost:8800/auth/registerWriter", inputs);
+      navigate("/login");
+    } catch (err) {
+      // setErrors((prev) => ({ ...prev, err: err.response.data }));
+      console.log(err);
+    }
   };
   return (
     <div className="bg-gradient-to-b from-cyan-500 to-blue-500 w-screen h-screen flex flex-col gap-3 justify-center items-center">
@@ -40,28 +60,45 @@ const Register = () => {
           placeholder="email"
           type="email"
           name="email"
+          onChange={handleChange}
         />
+        {errors.email && (
+          <p className="mt-2 text-sm text-red-600">{errors.email}</p>
+        )}
         <input
           className="text-body1 rounded-md p-2 focus:outline-none"
           required
           placeholder="username"
           type="username"
           name="username"
+          onChange={handleChange}
         />
+        {errors.username && (
+          <p className="mt-2 text-sm text-red-600">{errors.username}</p>
+        )}
         <input
           className="text-body1 rounded-md p-2 focus:outline-none"
           required
           placeholder="password"
           type="password"
           name="password"
+          onChange={handleChange}
         />
-        <input type="file" />
+        {errors.password && (
+          <p className="mt-2 text-sm text-red-600">{errors.password}</p>
+        )}
+        {/*<input type="file" required />*/}
         <button
+          onClick={handleSubmit}
           type="submit"
           className="w-full py-2 px-4 text-headLine4 bg-gradient-to-r rounded-full drop-shadow-md from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 "
         >
           Register
         </button>
+        {errors.err && (
+          <p className="mt-2 text-sm text-red-600">{errors.err}</p>
+        )}
+
         <span className="">
           You already have an account?{" "}
           <Link className="underline underline-offset-2 italic" to="/login">
