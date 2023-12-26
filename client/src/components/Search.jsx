@@ -65,12 +65,15 @@ const Search = () => {
           />
           <label htmlFor="technology">Technology</label>
         </div>
+        {/*
         <input
           className="text-body2 rounded-md border-2 border-primaryBlue1 px-2 focus:outline-none"
           placeholder="Search for title"
           type="text"
           name="keyword"
         />
+        */}
+
         <button className="rounded-full py-1 px-2 border-2 border-primaryBlue1 hover:bg-white bg-primaryBlue2">
           Search
         </button>
