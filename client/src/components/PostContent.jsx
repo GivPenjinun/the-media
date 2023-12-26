@@ -4,11 +4,12 @@ import { AuthContext } from "../context/authContext";
 import dog from "../assets/dog-bobo.jpg";
 import Suggest from "./Suggest";
 import axios from "axios";
+import Cookies from "js-cookie";
 import moment from "moment";
 
 const PostContent = () => {
   const [post, setPost] = useState({});
-
+  const token = Cookies.get("authToken");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,6 +30,20 @@ const PostContent = () => {
     };
     fetchData();
   }, [postId]);
+
+  //edit ย้ายไปdashboard
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:8800/posts/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   //edit อย่าลืมaccess post
   return (
@@ -59,6 +74,7 @@ const PostContent = () => {
           repellat. Repellendus, dolor nulla? Soluta error rem quos cumque nisi
           repellendus, atque officiis expedita laudantium corrupti quidem!
         </p>
+        <button onClick={handleDelete}>delete</button>
       </div>
       <div className="w-1/5 ">
         <Suggest />

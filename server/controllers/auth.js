@@ -44,9 +44,10 @@ export const loginWriter = (req, res) => {
       if (!isPasswordCorrect)
         return res.status(400).json("Wrong username or password!");
 
-      const token = jwt.sign({ id: data[0].id }, "jwtkey", {
+      const token = jwt.sign({ id: data[0].writer_id }, "jwtkey", {
         expiresIn: "1hr",
       });
+
       //For not sending password with json
       const { password, ...other } = data[0];
 
