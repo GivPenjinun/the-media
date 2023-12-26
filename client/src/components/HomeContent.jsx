@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import dog from "../assets/dog-bobo.jpg";
 
 const HomeContent = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   //to access currnt url param
   const search = useLocation().search;
@@ -43,6 +44,32 @@ const HomeContent = () => {
             <div className="w-full h-[350px] bg-primaryBlue2 absolute top-4 left-4 -z-10"></div>
           </div>
         </div>
+        {posts.map((post) => {
+          return (
+            <div
+              key={post.post_id}
+              className=" flex gap-5 w-full min-h-[350px]"
+            >
+              <div className="  w-2/3 min-h-[350px] flex flex-col gap-3 justify-evenly items-start">
+                <h1 className="text-headLine1">{post.title}</h1>
+                <p className="text-body1">{post.content.slice(0, 50)}</p>
+
+                <button
+                  onClick={() => {
+                    navigate(`/post/${post.post_id}`);
+                  }}
+                  className="rounded-md p-1 border-2 border-primaryBlue1 hover:bg-primaryBlue2"
+                >
+                  Read More
+                </button>
+              </div>
+              <div className=" w-1/3 relative ">
+                <img src={post.image} alt="" className="w-full h-[350px] " />
+                <div className="w-full h-[350px] bg-primaryBlue2 absolute top-4 left-4 -z-10"></div>
+              </div>
+            </div>
+          );
+        })}
       </main>
     </>
   );

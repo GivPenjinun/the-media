@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 import dog from "../assets/dog-bobo.jpg";
 import Suggest from "./Suggest";
+import axios from "axios";
+import moment from "moment";
 
-const BlogContent = () => {
+const PostContent = () => {
+  const [post, setPost] = useState({});
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  //get postId from current URL from index 2nd of array
+  const postId = location.pathname.split("/")[2];
+
+  const { currentUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8800/posts/${postId}`);
+        setPost(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [postId]);
+
+  //edit อย่าลืมaccess post
   return (
     <main className="my-20 px-20 flex gap-12 w-full min-h-[350px]">
       <div className="w-4/5 flex flex-col gap-8">
@@ -39,4 +67,4 @@ const BlogContent = () => {
   );
 };
 
-export default BlogContent;
+export default PostContent;

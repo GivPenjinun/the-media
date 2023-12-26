@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import BlogPage from "./pages/BlogPage";
+import SinglePost from "./pages/SinglePost";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import WriterProfile from "./pages/WriterProfile";
@@ -16,7 +16,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/blog/:blogId" element={<BlogPage />} />
+          <Route path="/post/:postId" element={<SinglePost />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Home />} />

@@ -10,10 +10,7 @@ export const AuthContexProvider = ({ children }) => {
   );
 
   const loginWriter = async (inputs) => {
-    const res = await axios.post(
-      "http://localhost:8800/auth/loginWriter",
-      inputs
-    );
+    const res = await axios.post("/auth/loginWriter", inputs);
 
     setCurrentUser(res.data.other);
     console.log(res);

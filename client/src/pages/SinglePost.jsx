@@ -1,16 +1,16 @@
 import React from "react";
 import NavBar from "../components/NavBar";
-import BlogContent from "../components/BlogContent";
+import PostContent from "../components/PostContent";
 import Footer from "../components/Footer";
 
-const BlogPage = () => {
+const SinglePost = () => {
   return (
     <>
       <NavBar />
-      <BlogContent />
+      <PostContent />
       <Footer />
     </>
   );
 };
 
-export default BlogPage;
+export default SinglePost;
