@@ -43,7 +43,7 @@ export const loginWriter = (req, res) => {
 
       if (!isPasswordCorrect)
         return res.status(400).json("Wrong username or password!");
-
+      //Note: should use SECRETKEY instead of "jwtkey"
       const token = jwt.sign({ id: data[0].writer_id }, "jwtkey", {
         expiresIn: "1hr",
       });
@@ -52,7 +52,7 @@ export const loginWriter = (req, res) => {
       const { password, ...other } = data[0];
 
       res
-        .cookie("access_token", token, {
+        .cookie("authToken", token, {
           httpOnly: true,
           secure: true, // Set to true if your application is served over HTTPS
           sameSite: "None", // Set to "None" for cross-site requests
@@ -70,7 +70,7 @@ export const loginWriter = (req, res) => {
 
 export const logout = (req, res) => {
   res
-    .clearCookie("access_token", {
+    .clearCookie("authToken", {
       sameSite: "none",
       secure: true,
     })

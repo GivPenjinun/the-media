@@ -34,11 +34,7 @@ const PostContent = () => {
   //edit ย้ายไปdashboard
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8800/posts/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(`http://localhost:8800/posts/${postId}`);
       navigate("/");
     } catch (err) {
       console.log(err);

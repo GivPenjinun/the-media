@@ -26,7 +26,7 @@ export const AuthContexProvider = ({ children }) => {
     setCurrentUser(null);
     localStorage.removeItem("user");
     Cookies.remove("authToken");
-    window.location.href = "/login";
+    window.location.replace("/login");
   };
 
   useEffect(() => {
