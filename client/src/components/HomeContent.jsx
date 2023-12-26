@@ -6,12 +6,12 @@ import dog from "../assets/dog-bobo.jpg";
 const HomeContent = () => {
   const [posts, setPosts] = useState([]);
   //to access currnt url param
-  const cat = useLocation().search;
-  console.log(cat);
+  const search = useLocation().search;
+  console.log(search);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:8800/posts${cat}`);
+        const res = await axios.get(`http://localhost:8800/posts${search}`);
         setPosts(res.data);
         console.log(res.data);
       } catch (err) {
@@ -20,7 +20,7 @@ const HomeContent = () => {
     };
 
     fetchData();
-  }, [cat]);
+  }, [search]);
   return (
     <>
       <main className="my-20 px-40 flex flex-col gap-10 [&>*:nth-child(odd)]:flex-row [&>*:nth-child(even)]:flex-row-reverse">

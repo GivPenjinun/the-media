@@ -2,11 +2,31 @@ import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 
 export const getPosts = (req, res) => {
-  const q = req.query.category
-    ? "SELECT * FROM posts WHERE category=?"
-    : "SELECT * FROM posts";
+  let q;
+  let queryParams;
 
-  db.query(q, [req.query.category], (err, data) => {
+  const title = req.query.title;
+
+  if (req.query.category && title) {
+    // Search by both category and partial title match (case-insensitive)
+    q =
+      "SELECT * FROM posts WHERE category = ? AND LOWER(title) LIKE LOWER(?) AND status=?";
+    queryParams = [req.query.category, `%${title}%`, "publish"]; // Use '%' as wildcard for partial match
+  } else if (req.query.category) {
+    // Search only by category
+    q = "SELECT * FROM posts WHERE category = ? AND status=?";
+    queryParams = [req.query.category, "publish"];
+  } else if (title) {
+    // Search only by partial title match (case-insensitive)
+    q = "SELECT * FROM posts WHERE LOWER(title) LIKE LOWER(?) AND status=?";
+    queryParams = [`%${title}%`, "publish"]; // Use '%' as wildcard for partial match
+  } else {
+    // Retrieve all posts if no category or title specified
+    q = "SELECT * FROM posts WHERE status=?";
+    queryParams = ["publish"];
+  }
+
+  db.query(q, queryParams, (err, data) => {
     if (err) return res.status(500).send(err);
 
     return res.status(200).json(data);
