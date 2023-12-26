@@ -38,7 +38,7 @@ export const getPosts = (req, res) => {
 
 export const getPost = (req, res) => {
   const q =
-    "SELECT `username`, `title`, `content`, p.post_id , p.image, w.image AS writerImg, `category`,`created_at` FROM writers w JOIN posts p ON w.writer_id = p.post_id WHERE p.post_id = ? ";
+    "SELECT `username`, `title`, `content`, p.post_id , p.image, w.image AS writerImg, `category`,`created_at` FROM writers w JOIN posts p ON w.writer_id = p.created_by WHERE p.post_id = ? ";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);

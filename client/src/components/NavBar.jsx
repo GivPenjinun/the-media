@@ -22,7 +22,7 @@ const NavBar = () => {
 
         <div className="flex gap-8">
           {currentUser ? (
-            <button onClick={handleLogout}>Logout</button>
+            <button onClick={logout}>Logout</button>
           ) : (
             <Link className="link" to="/login">
               Login

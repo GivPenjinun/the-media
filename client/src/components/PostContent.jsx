@@ -77,7 +77,7 @@ const PostContent = () => {
         <button onClick={handleDelete}>delete</button>
       </div>
       <div className="w-1/5 ">
-        <Suggest />
+        <Suggest category={post.category} />
       </div>
     </main>
   );

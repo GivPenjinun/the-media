@@ -18,7 +18,7 @@ export const AuthContexProvider = ({ children }) => {
     setCurrentUser(res.data.other);
     console.log(res);
     const jwtToken = res.data.token;
-    Cookies.set("authToken", jwtToken, { expires: 1 / 24 });
+    Cookies.set("authToken", jwtToken, { expires: 1 / 24 }, { httpOnly: true });
   };
 
   const logout = async (inputs) => {
@@ -26,6 +26,7 @@ export const AuthContexProvider = ({ children }) => {
     setCurrentUser(null);
     localStorage.removeItem("user");
     Cookies.remove("authToken");
+    window.location.href = "/login";
   };
 
   useEffect(() => {

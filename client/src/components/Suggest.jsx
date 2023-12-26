@@ -1,7 +1,27 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import dog from "../assets/dog-bobo.jpg";
 
-const Suggest = () => {
+const Suggest = (props) => {
+  const navigate = useNavigate();
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8800/posts/?category=${props.category}`
+        );
+        setPosts(res.data);
+        console.log(props.category);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [props.category]);
+
   return (
     <div className="flex flex-col gap-3">
       <h3 className="text-headLine4">Other posts you may like</h3>
@@ -12,15 +32,22 @@ const Suggest = () => {
           Read More
         </button>
       </div>
-      {/*
-    {posts.map(post)=>(<div key={post.id} className="flex flex-col gap-1">
-        <img src={post.image} alt="" className="" />
-        <h2 className="text-headLine3">{post.title}</h2>
-        <button className="text-body3 rounded-sm px-1 border-2 border-primaryBlue1 hover:bg-primaryBlue2">
-          Read More
-        </button>
-      </div>)}
-    */}
+      {posts.map((post) => {
+        return (
+          <div key={post.post_id} className="flex flex-col gap-1">
+            <img src={post.image} alt="" className="" />
+            <h2 className="text-headLine3">{post.title}</h2>
+            <button
+              onClick={() => {
+                navigate(`/post/${post.post_id}`);
+              }}
+              className="text-body3 rounded-sm px-1 border-2 border-primaryBlue1 hover:bg-primaryBlue2"
+            >
+              Read More
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 };
