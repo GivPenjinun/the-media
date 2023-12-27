@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 const app = express();
+//to use middleware for all API
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());

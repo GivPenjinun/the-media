@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 function jwtInterceptor() {
+  //call fuction everytime sending request
   axios.interceptors.request.use((req) => {
     const hasToken = Boolean(Cookies.get("authToken"));
 

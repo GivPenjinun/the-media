@@ -75,23 +75,14 @@ export const addPost = (req, res) => {
 
 //to delete post
 export const deletePost = (req, res) => {
-  //to check if it has token or not
-  //const token = req.cookies.authToken;
-  const token = req.headers["authorization"].replace("Bearer ", "");
-  if (!token) return res.status(401).json("Unauthorized");
+  const postId = req.params.id;
 
-  jwt.verify(token, "jwtkey", (err, userInfo) => {
-    if (err) return res.status(403).json("Token is not valid!");
+  const q = "DELETE FROM posts WHERE `post_id` = ? AND `created_by` = ?";
 
-    const postId = req.params.id;
+  db.query(q, [postId, req.user.id], (err, data) => {
+    if (err) return res.status(403).json("You can delete only your post!");
 
-    const q = "DELETE FROM posts WHERE `post_id` = ? AND `created_by` = ?";
-
-    db.query(q, [postId, userInfo.id], (err, data) => {
-      if (err) return res.status(403).json("You can delete only your post!");
-
-      return res.json("Post has been deleted!");
-    });
+    return res.json("Post has been deleted!");
   });
 };
 

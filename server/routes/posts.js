@@ -6,8 +6,11 @@ import {
   getPosts,
   updatePost,
 } from "../controllers/posts.js";
+import { protect } from "../middlewares/protect.js";
 
 const posts = express.Router();
+
+posts.use(protect);
 
 posts.get("/", getPosts);
 posts.get("/:id", getPost);
