@@ -31,7 +31,7 @@ const upload = multer({ storage });
 //API for upload one image
 app.post("/uploadImage", upload.single("image"), function (req, res) {
   const file = req.file;
-  console.log(file);
+
   res.status(200).json(file.filename);
 });
 

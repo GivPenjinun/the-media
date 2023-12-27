@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 
 const Write = () => {
+  const [errors, setErrors] = useState({});
   const state = useLocation().state;
   const [content, setContent] = useState(state?.content || "");
   const [title, setTitle] = useState(state?.title || "");
@@ -13,6 +14,32 @@ const Write = () => {
   const [category, setCategory] = useState(state?.category || "");
 
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validate Title
+    if (!title) {
+      newErrors.title = "Please write title";
+    }
+
+    // Validate Content
+    if (!content) {
+      newErrors.content = "Please write content";
+    }
+
+    //Validate Category
+    if (!category) {
+      newErrors.category = "Choose one category";
+    }
+
+    //Validate Image
+    if (!file) {
+      newErrors.image = "Choose one image";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const upload = async () => {
     try {
@@ -29,31 +56,34 @@ const Write = () => {
   };
 
   //sending request by call upload first
-  const handleClick = async (e) => {
+  const handlePublish = async (e) => {
     e.preventDefault();
-    const imgUrl = await upload();
 
-    try {
-      state
-        ? await axios.put(`http://localhost:8800/posts/${state.id}`, {
-            title,
-            content,
-            category,
-            image: file ? imgUrl : "",
-            updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-          })
-        : await axios.post(`http://localhost:8800/posts/`, {
-            title,
-            content,
-            category,
-            image: file ? imgUrl : "",
-            created_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-            updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-            status: "publish",
-          });
-      navigate("/");
-    } catch (err) {
-      console.log(err);
+    const validate = validateForm();
+    if (validate) {
+      const imgUrl = await upload();
+      try {
+        state
+          ? await axios.put(`http://localhost:8800/posts/${state.id}`, {
+              title,
+              content,
+              category,
+              image: file ? imgUrl : "",
+              updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+            })
+          : await axios.post(`http://localhost:8800/posts/`, {
+              title,
+              content,
+              category,
+              image: file ? imgUrl : "",
+              created_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+              updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+              status: "publish",
+            });
+        navigate("/");
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -80,17 +110,19 @@ const Write = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <input
-        required
-        id="title"
-        name="title"
-        type="text"
-        placeholder="title"
-        onChange={(e) => setTitle(e.target.value)}
-        className="border-primaryGray5 border-2 rounded-lg w-full  mt-2 text-primaryGray2 p-2 focus:outline-none "
-      />
+      <div className="">
+        <input
+          required
+          id="title"
+          name="title"
+          type="text"
+          placeholder="title"
+          onChange={(e) => setTitle(e.target.value)}
+          className="border-primaryGray5 border-2 rounded-lg w-full  mt-2 text-primaryGray2 p-2 focus:outline-none "
+        />
+      </div>
 
-      <form className="flex items-center gap-3">
+      <div className="flex items-center gap-3">
         <h4 className="font-bold">Category:</h4>
         <div className="flex items-center gap-1">
           <input
@@ -153,7 +185,8 @@ const Write = () => {
           />
           <label htmlFor="technology">Technology</label>
         </div>
-      </form>
+      </div>
+
       <div className="w-full min-h-[350px] ">
         <ReactQuill
           required
@@ -163,6 +196,7 @@ const Write = () => {
           className="editor"
         />
       </div>
+
       <div className="flex gap-5">
         <label htmlFor="file" className="font-bold">
           Upload Image
@@ -179,12 +213,25 @@ const Write = () => {
         </span>
       </div>
       <div className="">
-        <img
-          className="image-preview w-[650px] h-[350px]"
-          src={file ? URL.createObjectURL(file) : ""}
-        />
+        {file ? (
+          <img
+            className="image-preview w-[650px] h-[350px]"
+            src={URL.createObjectURL(file)}
+          />
+        ) : null}
       </div>
       <div className="flex flex-col gap-2">
+        <div className="">
+          {Object.keys(errors).length
+            ? Object.keys(errors).map((key, id) => {
+                return (
+                  <p key={id} className="mt-2 text-sm text-red-600">
+                    {errors[key]}
+                  </p>
+                );
+              })
+            : null}
+        </div>
         <h2 className="text-headLine4">Save Draft or Publish?</h2>
         {/* <p>
           <span className="font-bold">Status:</span> Draft
@@ -202,7 +249,7 @@ const Write = () => {
             Save as draft
           </button>
           <button
-            onClick={handleClick}
+            onClick={handlePublish}
             className="py-1 px-2 border-2 border-primaryBlue1 hover:bg-primaryBlue2 bg-white"
           >
             Publish
