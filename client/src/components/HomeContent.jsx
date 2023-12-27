@@ -22,6 +22,12 @@ const HomeContent = () => {
 
     fetchData();
   }, [search]);
+
+  //display content from html file
+  const getText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent;
+  };
   return (
     <>
       <main className="my-20 px-40 flex flex-col gap-10 [&>*:nth-child(odd)]:flex-row [&>*:nth-child(even)]:flex-row-reverse">
@@ -52,7 +58,9 @@ const HomeContent = () => {
             >
               <div className="  w-2/3 min-h-[350px] flex flex-col gap-3 justify-evenly items-start">
                 <h1 className="text-headLine1">{post.title}</h1>
-                <p className="text-body1">{post.content.slice(0, 50)}</p>
+                <p className="text-body1">
+                  {getText(post.content).slice(0, 100)}
+                </p>
 
                 <button
                   onClick={() => {
@@ -64,7 +72,11 @@ const HomeContent = () => {
                 </button>
               </div>
               <div className=" w-1/3 relative ">
-                <img src={post.image} alt="" className="w-full h-[350px] " />
+                <img
+                  src={`http://localhost:8800/upload/${post.image}`}
+                  alt=""
+                  className="w-full h-[350px] "
+                />
                 <div className="w-full h-[350px] bg-primaryBlue2 absolute top-4 left-4 -z-10"></div>
               </div>
             </div>

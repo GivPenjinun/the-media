@@ -31,6 +31,12 @@ const PostContent = () => {
     fetchData();
   }, [postId]);
 
+  //display content from html file
+  const getText = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent;
+  };
+
   //edit ย้ายไปdashboard
   const handleDelete = async () => {
     try {
@@ -58,13 +64,13 @@ const PostContent = () => {
         </div>
         <h1 className="  text-headLine1">title</h1>
         <p className="  text-body1 ">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus
-          asperiores laboriosam voluptatibus assumenda repellat. Repellendus,
-          dolor nulla? Soluta error rem quos cumque nisi repellendus, atque
-          officiis expedita laudantium corrupti quidem! Lorem ipsum dolor sit
-          amet consectetur, adipisicing elit. Natus asperiores laboriosam
-          voluptatibus assumenda repellat. Repellendus, dolor nulla? Soluta
-          error rem quos cumque nisi repellendus, atque officiis expedita
+          {getText(post.content)} Lorem ipsum dolor sit amet consectetur,
+          adipisicing elit. Natus asperiores laboriosam voluptatibus assumenda
+          repellat. Repellendus, dolor nulla? Soluta error rem quos cumque nisi
+          repellendus, atque officiis expedita laudantium corrupti quidem! Lorem
+          ipsum dolor sit amet consectetur, adipisicing elit. Natus asperiores
+          laboriosam voluptatibus assumenda repellat. Repellendus, dolor nulla?
+          Soluta error rem quos cumque nisi repellendus, atque officiis expedita
           laudantium corrupti quidem! Lorem ipsum dolor sit amet consectetur,
           adipisicing elit. Natus asperiores laboriosam voluptatibus assumenda
           repellat. Repellendus, dolor nulla? Soluta error rem quos cumque nisi

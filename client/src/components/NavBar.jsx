@@ -32,7 +32,7 @@ const NavBar = () => {
               Login
             </Link>
           )}
-          <Link className="link" to="/write">
+          <Link className="link" to={`/writer/profile/:writerId`}>
             Write
           </Link>
         </div>

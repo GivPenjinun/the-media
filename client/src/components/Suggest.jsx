@@ -1,11 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import dog from "../assets/dog-bobo.jpg";
 
 const Suggest = (props) => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
+  const location = useLocation();
+
+  //get postId from current URL from index 2nd of array
+  const postId = location.pathname.split("/")[2];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,22 +36,28 @@ const Suggest = (props) => {
           Read More
         </button>
       </div>
-      {posts.map((post) => {
-        return (
-          <div key={post.post_id} className="flex flex-col gap-1">
-            <img src={post.image} alt="" className="" />
-            <h2 className="text-headLine3">{post.title}</h2>
-            <button
-              onClick={() => {
-                navigate(`/post/${post.post_id}`);
-              }}
-              className="text-body3 rounded-sm px-1 border-2 border-primaryBlue1 hover:bg-primaryBlue2"
-            >
-              Read More
-            </button>
-          </div>
-        );
-      })}
+      {posts
+        .filter((post) => post.post_id != postId)
+        .map((post) => {
+          return (
+            <div key={post.post_id} className="flex flex-col gap-1">
+              <img
+                src={`http://localhost:8800/upload/${post.image}`}
+                alt=""
+                className=""
+              />
+              <h2 className="text-headLine3">{post.title}</h2>
+              <button
+                onClick={() => {
+                  navigate(`/post/${post.post_id}`);
+                }}
+                className="text-body3 rounded-sm px-1 border-2 border-primaryBlue1 hover:bg-primaryBlue2"
+              >
+                Read More
+              </button>
+            </div>
+          );
+        })}
     </div>
   );
 };

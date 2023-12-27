@@ -1,18 +1,92 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const Write = () => {
-  const [value, setValue] = useState("");
+  const state = useLocation().state;
+  const [content, setContent] = useState(state?.content || "");
+  const [title, setTitle] = useState(state?.title || "");
+  const [file, setFile] = useState(null);
+  const [category, setCategory] = useState(state?.category || "");
+
+  const navigate = useNavigate();
+
+  const upload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await axios.post(
+        "http://localhost:8800/uploadImage",
+        formData
+      );
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //sending request by call upload first
+  const handleClick = async (e) => {
+    e.preventDefault();
+    const imgUrl = await upload();
+
+    try {
+      state
+        ? await axios.put(`http://localhost:8800/posts/${state.id}`, {
+            title,
+            content,
+            category,
+            image: file ? imgUrl : "",
+            updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          })
+        : await axios.post(`http://localhost:8800/posts/`, {
+            title,
+            content,
+            category,
+            image: file ? imgUrl : "",
+            created_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+            updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+            status: "publish",
+          });
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //for save draft
+  const handleDraft = async (e) => {
+    e.preventDefault();
+    const imgUrl = await upload();
+
+    try {
+      await axios.post(`http://localhost:8800/posts/`, {
+        title,
+        content,
+        category,
+        image: file ? imgUrl : "",
+        created_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+        updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+        status: "draft",
+      });
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-5">
       <input
+        required
         id="title"
         name="title"
         type="text"
         placeholder="title"
-        //onChange={handleFileChange}
+        onChange={(e) => setTitle(e.target.value)}
         className="border-primaryGray5 border-2 rounded-lg w-full  mt-2 text-primaryGray2 p-2 focus:outline-none "
       />
 
@@ -20,11 +94,12 @@ const Write = () => {
         <h4 className="font-bold">Category:</h4>
         <div className="flex items-center gap-1">
           <input
+            required
             type="radio"
             id="art"
             name="category"
             value="art"
-            className=""
+            onChange={(e) => setCategory(e.target.value)}
           />
           <label htmlFor="art">Art</label>
         </div>
@@ -34,7 +109,7 @@ const Write = () => {
             id="entertain"
             name="category"
             value="entertain"
-            className=""
+            onChange={(e) => setCategory(e.target.value)}
           />
           <label htmlFor="entertain">Entertain</label>
         </div>
@@ -44,7 +119,7 @@ const Write = () => {
             id="design"
             name="category"
             value="design"
-            className=""
+            onChange={(e) => setCategory(e.target.value)}
           />
           <label htmlFor="design">Design</label>
         </div>
@@ -54,7 +129,7 @@ const Write = () => {
             id="food"
             name="category"
             value="food"
-            className=""
+            onChange={(e) => setCategory(e.target.value)}
           />
           <label htmlFor="food">Food</label>
         </div>
@@ -64,7 +139,7 @@ const Write = () => {
             id="science"
             name="category"
             value="science"
-            className=""
+            onChange={(e) => setCategory(e.target.value)}
           />
           <label htmlFor="science">Science</label>
         </div>
@@ -74,16 +149,17 @@ const Write = () => {
             id="technology"
             name="category"
             value="technology"
-            className=""
+            onChange={(e) => setCategory(e.target.value)}
           />
           <label htmlFor="technology">Technology</label>
         </div>
       </form>
       <div className="w-full min-h-[350px] ">
         <ReactQuill
+          required
           theme="snow"
-          value={value}
-          onChange={setValue}
+          value={content}
+          onChange={setContent}
           className="editor"
         />
       </div>
@@ -95,25 +171,41 @@ const Write = () => {
           id="file"
           name="photo"
           type="file"
-
-          //onChange={handleFileChange}
+          required
+          onChange={(e) => setFile(e.target.files[0])}
+        />
+        <span className="text-red-500">
+          optimum image size: width 650px height 350px
+        </span>
+      </div>
+      <div className="">
+        <img
+          className="image-preview w-[650px] h-[350px]"
+          src={file ? URL.createObjectURL(file) : ""}
         />
       </div>
       <div className="flex flex-col gap-2">
-        <h2 className="text-headLine3">Publish</h2>
-
-        <p>
+        <h2 className="text-headLine4">Save Draft or Publish?</h2>
+        {/* <p>
           <span className="font-bold">Status:</span> Draft
         </p>
         <p>
           <span className="font-bold">Visibility:</span> Public
         </p>
+        */}
+
         <div className="flex gap-4">
-          <button className="py-1 px-2 border-2 border-primaryBlue1 hover:bg-primaryBlue2 bg-white">
+          <button
+            onClick={handleDraft}
+            className="py-1 px-2 border-2 border-primaryBlue1 hover:bg-primaryBlue2 bg-white"
+          >
             Save as draft
           </button>
-          <button className="py-1 px-2 border-2 border-primaryBlue1 hover:bg-primaryBlue2 bg-white">
-            Update
+          <button
+            onClick={handleClick}
+            className="py-1 px-2 border-2 border-primaryBlue1 hover:bg-primaryBlue2 bg-white"
+          >
+            Publish
           </button>
         </div>
       </div>
