@@ -24,7 +24,7 @@ export const getPosts = (req, res) => {
     queryParams = [`%${title}%`, "publish"]; // Use '%' as wildcard for partial match
   } else {
     // Retrieve all posts if no category or title specified
-    q = "SELECT * FROM posts WHERE status=? ORDER BY created_at DESC";
+    q = "SELECT * FROM posts WHERE status=? ORDER BY updated_at DESC";
 
     queryParams = ["publish"];
   }
@@ -48,28 +48,23 @@ export const getPost = (req, res) => {
 };
 
 export const addPost = (req, res) => {
-  const token = req.cookies.access_token;
-  if (!token) return res.status(401).json("Not authenticated!");
+  const q =
+    "INSERT INTO posts(`title`, `content`, `image`, `category`, `created_at`, `updated_at`, `status`,`created_by`) VALUES (?)";
 
-  jwt.verify(token, "jwtkey", (err, userInfo) => {
-    if (err) return res.status(403).json("Token is not valid!");
+  const values = [
+    req.body.title,
+    req.body.content,
+    req.body.image,
+    req.body.category,
+    req.body.created_at,
+    req.body.updated_at,
+    req.body.status,
+    req.user.id,
+  ];
 
-    const q =
-      "INSERT INTO posts(`title`, `desc`, `img`, `cat`, `date`,`uid`) VALUES (?)";
-
-    const values = [
-      req.body.title,
-      req.body.desc,
-      req.body.img,
-      req.body.cat,
-      req.body.date,
-      userInfo.id,
-    ];
-
-    db.query(q, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
-      return res.json("Post has been created.");
-    });
+  db.query(q, [values], (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.json("Post has been created.");
   });
 };
 

@@ -3,18 +3,36 @@ import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import multer from "multer";
 
 const app = express();
 //to use middleware for all API
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static("public"));
 
 app.use("/posts", postRoutes);
 app.use("/auth", authRoutes);
 
-app.get("/test", (req, res) => {
-  res.json("works");
+//Upload API
+//decide where to storage
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, "./public/upload");
+  },
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+//API for upload one image
+app.post("/uploadImage", upload.single("image"), function (req, res) {
+  const file = req.file;
+  console.log(file);
+  res.status(200).json(file.filename);
 });
 
 app.listen(8800, () => {
