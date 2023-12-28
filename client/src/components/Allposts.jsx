@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-faTrashCan;
+import { Link } from "react-router-dom";
 import { faTrashCan, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
@@ -48,9 +48,12 @@ const Allposts = () => {
                     <h1 className="text-body1">By {work.username}</h1>
                   </div>
                   <div className="w-1/6 h-full flex flex-col justify-center items-start pr-5">
-                    <div className="text-secondaryGreen1 cursor-pointer">
-                      <FontAwesomeIcon icon={faPenToSquare} /> Update
-                    </div>
+                    <Link to={`/writer/writepost?edit`} state={work}>
+                      <div className="text-secondaryGreen1 cursor-pointer">
+                        <FontAwesomeIcon icon={faPenToSquare} /> Update
+                      </div>
+                    </Link>
+
                     <button
                       onClick={() => handleDelete(work.post_id)}
                       className="text-red-500 cursor-pointer"

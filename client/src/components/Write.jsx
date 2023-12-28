@@ -6,13 +6,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 
 const Write = () => {
+  const writerId = JSON.parse(localStorage.getItem("user")).writer_id || null;
   const [errors, setErrors] = useState({});
   const state = useLocation().state;
   const [content, setContent] = useState(state?.content || "");
   const [title, setTitle] = useState(state?.title || "");
+  console.log(state);
   const [file, setFile] = useState(null);
   const [category, setCategory] = useState(state?.category || "");
-
+  console.log(category);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -34,25 +36,28 @@ const Write = () => {
     }
 
     //Validate Image
-    if (!file) {
+    if (!file && !state.image) {
       newErrors.image = "Choose one image";
     }
     setErrors(newErrors);
+    console.log(errors);
     return Object.keys(newErrors).length === 0;
   };
 
   const upload = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      const res = await axios.post(
-        "http://localhost:8800/uploadImage",
-        formData
-      );
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await axios.post(
+          "http://localhost:8800/uploadImage",
+          formData
+        );
+        return res.data;
+      } catch (err) {
+        console.log(err);
+      }
+    } else return null;
   };
 
   //sending request by call upload first
@@ -64,23 +69,24 @@ const Write = () => {
       const imgUrl = await upload();
       try {
         state
-          ? await axios.put(`http://localhost:8800/posts/${state.id}`, {
+          ? await axios.put(`http://localhost:8800/posts/${state.post_id}`, {
               title,
               content,
               category,
-              image: file ? imgUrl : "",
+              image: file ? imgUrl : state.image,
+              status: "publish",
               updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
             })
           : await axios.post(`http://localhost:8800/posts/`, {
               title,
               content,
               category,
-              image: file ? imgUrl : "",
+              image: imgUrl,
               created_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
               updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
               status: "publish",
             });
-        navigate("/");
+        navigate(`/writer/allworks/${writerId}`);
       } catch (err) {
         console.log(err);
       }
@@ -93,16 +99,25 @@ const Write = () => {
     const imgUrl = await upload();
 
     try {
-      await axios.post(`http://localhost:8800/posts/`, {
-        title,
-        content,
-        category,
-        image: file ? imgUrl : "",
-        created_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-        updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-        status: "draft",
-      });
-      navigate("/");
+      state
+        ? await axios.put(`http://localhost:8800/posts/${state.post_id}`, {
+            title,
+            content,
+            category,
+            status: "draft",
+            image: file ? imgUrl : state.image,
+            updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          })
+        : await axios.post(`http://localhost:8800/posts/`, {
+            title,
+            content,
+            category,
+            image: file ? imgUrl : "",
+            created_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+            updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+            status: "draft",
+          });
+      navigate(`/writer/allworks/${writerId}`);
     } catch (err) {
       console.log(err);
     }
@@ -117,6 +132,7 @@ const Write = () => {
           name="title"
           type="text"
           placeholder="title"
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="border-primaryGray5 border-2 rounded-lg w-full  mt-2 text-primaryGray2 p-2 focus:outline-none "
         />
@@ -130,6 +146,7 @@ const Write = () => {
             type="radio"
             id="art"
             name="category"
+            checked={category === "art"}
             value="art"
             onChange={(e) => setCategory(e.target.value)}
           />
@@ -140,6 +157,7 @@ const Write = () => {
             type="radio"
             id="entertain"
             name="category"
+            checked={category === "entertain"}
             value="entertain"
             onChange={(e) => setCategory(e.target.value)}
           />
@@ -150,6 +168,7 @@ const Write = () => {
             type="radio"
             id="design"
             name="category"
+            checked={category === "design"}
             value="design"
             onChange={(e) => setCategory(e.target.value)}
           />
@@ -160,6 +179,7 @@ const Write = () => {
             type="radio"
             id="food"
             name="category"
+            checked={category === "food"}
             value="food"
             onChange={(e) => setCategory(e.target.value)}
           />
@@ -170,6 +190,7 @@ const Write = () => {
             type="radio"
             id="science"
             name="category"
+            checked={category === "science"}
             value="science"
             onChange={(e) => setCategory(e.target.value)}
           />
@@ -180,6 +201,7 @@ const Write = () => {
             type="radio"
             id="technology"
             name="category"
+            checked={category === "technology"}
             value="technology"
             onChange={(e) => setCategory(e.target.value)}
           />
@@ -217,6 +239,11 @@ const Write = () => {
           <img
             className="image-preview w-[650px] h-[350px]"
             src={URL.createObjectURL(file)}
+          />
+        ) : state?.image ? (
+          <img
+            className="image-preview w-[650px] h-[350px]"
+            src={`http://localhost:8800/upload/${state?.image}`}
           />
         ) : null}
       </div>

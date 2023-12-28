@@ -38,7 +38,7 @@ export const getPosts = (req, res) => {
 
 export const getPost = (req, res) => {
   const q =
-    "SELECT `username`, `title`, `content`, p.post_id , p.image, w.image AS writerImg, `category`,`created_at` FROM writers w JOIN posts p ON w.writer_id = p.created_by WHERE p.post_id = ? ";
+    "SELECT `username`, `title`, `content`, p.post_id , p.image, w.image AS writerImg, `category`,`updated_at` FROM writers w JOIN posts p ON w.writer_id = p.created_by WHERE p.post_id = ? ";
 
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -82,21 +82,21 @@ export const deletePost = (req, res) => {
 };
 
 export const updatePost = (req, res) => {
-  const token = req.cookies.access_token;
-  if (!token) return res.status(401).json("Unauthorized");
+  const postId = req.params.id;
+  const q =
+    "UPDATE posts SET `title`=?,`content`=?,`image`=?,`category`=?, `status`=?,`updated_at`=? WHERE `post_id` = ? AND `created_by` = ?";
 
-  jwt.verify(token, "jwtkey", (err, userInfo) => {
-    if (err) return res.status(403).json("Token is not valid!");
+  const values = [
+    req.body.title,
+    req.body.content,
+    req.body.image,
+    req.body.category,
+    req.body.status,
+    req.body.updated_at,
+  ];
 
-    const postId = req.params.id;
-    const q =
-      "UPDATE posts SET `title`=?,`desc`=?,`img`=?,`cat`=? WHERE `id` = ? AND `uid` = ?";
-
-    const values = [req.body.title, req.body.desc, req.body.img, req.body.cat];
-
-    db.query(q, [...values, postId, userInfo.id], (err, data) => {
-      if (err) return res.status(500).json(err);
-      return res.json("Post has been updated.");
-    });
+  db.query(q, [...values, postId, req.user.id], (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.json("Post has been updated.");
   });
 };

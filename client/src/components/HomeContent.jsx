@@ -54,7 +54,7 @@ const HomeContent = () => {
           return (
             <div
               key={post.post_id}
-              className=" flex gap-5 w-full min-h-[350px]"
+              className=" flex gap-10 w-full min-h-[350px]"
             >
               <div className="  w-2/3 min-h-[350px] flex flex-col gap-3 justify-evenly items-start">
                 <h1 className="text-headLine1">{post.title}</h1>
