@@ -1,10 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AuthContext } from "../context/authContext";
+import axios from "axios";
+import profile from "../assets/user-profile.png";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const [errors, setErrors] = useState({});
-  const handleSubmit = () => {};
+  const location = useLocation();
+  const [file, setFile] = useState(null);
+  const [writer, setWriter] = useState(null);
+  const { currentUser } = useContext(AuthContext);
+  const [errors, setErrors] = useState(null);
+  const writerId = JSON.parse(localStorage.getItem("user")).writer_id || null;
 
   const currentURL = window.location.href;
   const checkURL = () => {
@@ -14,18 +22,68 @@ const Profile = () => {
     }
   };
 
+  const upload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await axios.post(
+        "http://localhost:8800/uploadImage",
+        formData
+      );
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  /*
+  const handleUpdate = async () => {
+    const imgUrl = await upload();
+    console.log(imgUrl);
+  };*/
+
+  const handleUpdate = async () => {
+    if (file) {
+      const imgUrl = await upload();
+      try {
+        await axios.put(`http://localhost:8800/writer/${writerId}`, {
+          image: imgUrl,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setErrors("Insert one image");
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8800/writer/${writerId}`);
+      setWriter(res.data);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    checkURL();
+    fetchData();
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10">
       <div className="flex justify-center relative items-center my-14 w-[220px] h-[220px] rounded-full bg-slate-200">
-        <img
-          className="object-cover w-[220px] h-[220px] rounded-full"
-          src=""
-          alt="Profile Avatar"
-        />
+        {file ? (
+          <img
+            className="object-cover w-[220px] h-[220px] rounded-full"
+            src={URL.createObjectURL(file)}
+          />
+        ) : (
+          <img
+            className="object-cover w-[220px] h-[220px] rounded-full"
+            src={`http://localhost:8800/upload/${writer?.image}`}
+          />
+        )}
 
         <label
           htmlFor="upload"
@@ -36,11 +94,13 @@ const Profile = () => {
             id="upload"
             name="avatar"
             type="file"
-            //onChange={handleFileChange}
+            onChange={(e) => setFile(e.target.files[0])}
             hidden
           />
         </label>
       </div>
+      {/*
+      //For changing Username and Email
       <div className="flex flex-col gap-1">
         <label htmlFor="userName">Your username*</label>
         <input
@@ -74,8 +134,8 @@ const Profile = () => {
           <p className="mt-2 text-sm text-red-600">{errors.email}</p>
         )}
       </div>
-
-      <div className="flex flex-col gap-1 ">
+      
+ <div className="flex flex-col gap-1 ">
         <label htmlFor="introduction">Introduction</label>
         <textarea
           rows={10}
@@ -83,25 +143,33 @@ const Profile = () => {
           id="introduction"
           name="introduction"
           placeholder="Introduce Yourself"
-          //value={introduction}
-          //onChange={(event) => setintroduction(event.target.value)}
           className="invalid:border-red-500 border-primaryGray5 border-2 rounded-lg w-full  mt-2 text-primaryGray2 p-2 focus:outline-none focus:border-primaryBlue2"
         />
-
-        {errors.idNumber && (
-          <p className="mt-2 text-sm text-red-600">{errors.idNumber}</p>
-        )}
       </div>
+*/}
 
-      <div className="flex justify-end items-center ">
+      <div className="flex justify-end items-center gap-3">
         <button
-          type="submit"
+          onClick={handleUpdate}
           className=" h-[50px] px-5 py-1 bg-primaryBlue1 rounded-full active:bg-primaryBlue2 text-white hover:bg-primaryBlue2 disabled:bg-primaryGray4 disabled:text-primaryGray3"
         >
-          Update Profile
+          Upload Profile Image
+        </button>
+        <button
+          onClick={() => {
+            setFile(null);
+          }}
+          className=" h-[50px] px-5 py-1 bg-primaryBlue1 rounded-full active:bg-primaryBlue2 text-white hover:bg-primaryBlue2 disabled:bg-primaryGray4 disabled:text-primaryGray3"
+        >
+          Cancel
         </button>
       </div>
-    </form>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-headLine4">Your username:</h1>
+        <h2 className="text-body1">{writer?.username}</h2>
+      </div>
+      <h1 className="text-red-500">{errors}</h1>
+    </div>
   );
 };
 

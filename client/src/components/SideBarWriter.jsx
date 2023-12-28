@@ -12,6 +12,7 @@ const SideBarWriter = () => {
   const profileRef = useRef(null);
   const allworksRef = useRef(null);
   const writeRef = useRef(null);
+  const writerId = JSON.parse(localStorage.getItem("user")).writer_id || null;
 
   const currentURL = window.location.href;
   const checkURL = () => {
@@ -38,7 +39,7 @@ const SideBarWriter = () => {
         <button
           ref={profileRef}
           onClick={() => {
-            navigate(`/writer/profile/:writerId`);
+            navigate(`/writer/profile/${writerId}`);
           }}
           className="text-headLine5 gap-4  flex justify-start items-center p-4 pl-7 hover:bg-primaryBlue2 active:bg-primaryBlue2 focus:bg-primaryBlue2 "
         >
@@ -58,7 +59,7 @@ const SideBarWriter = () => {
         <button
           ref={allworksRef}
           onClick={() => {
-            navigate(`/writer/allworks/:writerId`);
+            navigate(`/writer/allworks/${writerId}`);
           }}
           className="text-headLine5 gap-4  flex justify-start items-center p-4 pl-7 hover:bg-primaryBlue2 active:bg-primaryBlue2 focus:bg-primaryBlue2 "
         >

@@ -16,8 +16,14 @@ export const registerWriter = (req, res) => {
     const hash = bcrypt.hashSync(req.body.password, salt);
     const id = uuidv4();
     const q =
-      "INSERT INTO writers(`writer_id`,`username`,`email`,`password`) VALUES (?)";
-    const values = [id, req.body.username, req.body.email, hash];
+      "INSERT INTO writers(`writer_id`,`image`,`username`,`email`,`password`) VALUES (?)";
+    const values = [
+      id,
+      "user-profile.png",
+      req.body.username,
+      req.body.email,
+      hash,
+    ];
 
     db.query(q, [values], (err, data) => {
       if (err) return res.status(500).json(err);
@@ -49,7 +55,7 @@ export const loginWriter = (req, res) => {
       });
 
       //For not sending password with json
-      const { password, ...other } = data[0];
+      const { password, email, image, ...other } = data[0];
 
       res
         .cookie("authToken", token, {
