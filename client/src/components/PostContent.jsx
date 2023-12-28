@@ -37,16 +37,6 @@ const PostContent = () => {
     return doc.body.textContent;
   };
 
-  //edit ย้ายไปdashboard
-  const handleDelete = async () => {
-    try {
-      await axios.delete(`http://localhost:8800/posts/${postId}`);
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   //edit อย่าลืมaccess post
   return (
     <main className="my-20 px-20 flex gap-12 w-full min-h-[350px]">
@@ -76,7 +66,6 @@ const PostContent = () => {
           repellat. Repellendus, dolor nulla? Soluta error rem quos cumque nisi
           repellendus, atque officiis expedita laudantium corrupti quidem!
         </p>
-        <button onClick={handleDelete}>delete</button>
       </div>
       <div className="w-1/5 ">
         <Suggest category={post.category} />

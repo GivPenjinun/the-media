@@ -6,7 +6,7 @@ import axios from "axios";
 import profile from "../assets/user-profile.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const Profile = () => {
+const Writer = () => {
   const location = useLocation();
   const [file, setFile] = useState(null);
   const [writer, setWriter] = useState(null);
@@ -60,7 +60,7 @@ const Profile = () => {
     try {
       const res = await axios.get(`http://localhost:8800/writer/${writerId}`);
       setWriter(res.data);
-      console.log(res.data);
+      //console.log(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -173,4 +173,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Writer;
