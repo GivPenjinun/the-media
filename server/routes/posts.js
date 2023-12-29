@@ -10,12 +10,12 @@ import { protect } from "../middlewares/protect.js";
 
 const posts = express.Router();
 
-posts.use(protect);
+//posts.use(protect);
 
 posts.get("/", getPosts);
-posts.get("/:id", getPost);
-posts.post("/", addPost);
-posts.delete("/:id", deletePost);
-posts.put("/:id", updatePost);
+posts.get("/:id", protect, getPost);
+posts.post("/", protect, addPost);
+posts.delete("/:id", protect, deletePost);
+posts.put("/:id", protect, updatePost);
 
 export default posts;

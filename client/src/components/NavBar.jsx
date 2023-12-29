@@ -32,21 +32,21 @@ const NavBar = () => {
               Login
             </Link>
           )}
-          {currentUser.writer_id ? (
+          {currentUser?.writer_id ? (
             <Link
               className="link"
               to={`/writer/profile/${currentUser.writer_id}`}
             >
               Write
             </Link>
-          ) : (
+          ) : currentUser?.reader_id ? (
             <Link
               className="link"
               to={`/reader/profile/${currentUser.reader_id}`}
             >
               Read
             </Link>
-          )}
+          ) : null}
         </div>
       </nav>
     </>
