@@ -18,7 +18,7 @@ const Suggest = (props) => {
           `http://localhost:8800/posts/?category=${props.category}`
         );
         setPosts(res.data);
-        console.log(props.category);
+        //console.log(props.category);
       } catch (err) {
         console.log(err);
       }

@@ -43,7 +43,7 @@ const NavBar = () => {
           ) : currentUser?.reader_id ? (
             <Link
               className="link"
-              to={`/reader/profile/${currentUser.reader_id}`}
+              to={`/reader/favposts/${currentUser.reader_id}`}
             >
               Read
             </Link>

@@ -31,6 +31,7 @@ const SideBarReader = () => {
         <div className="text-headLine4 flex justify-start items-center py-3 pl-7 ">
           Account
         </div>
+        {/* 
         <button
           ref={profileRef}
           onClick={() => {
@@ -41,7 +42,7 @@ const SideBarReader = () => {
           <FontAwesomeIcon icon={faUser} />
           Profile
         </button>
-
+*/}
         <button
           ref={favpostsRef}
           onClick={() => {

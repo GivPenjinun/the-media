@@ -20,6 +20,7 @@ export const protect = async (req, res, next) => {
     }
     //insert data from token in req.user
     req.user = payload;
+    //console.log(req.user);
     next();
   });
 };

@@ -2,6 +2,7 @@ import express from "express";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import writerRoutes from "./routes/writers.js";
+import readerRoutes from "./routes/readers.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
@@ -16,6 +17,7 @@ app.use(express.static("public"));
 app.use("/posts", postRoutes);
 app.use("/auth", authRoutes);
 app.use("/writer", writerRoutes);
+app.use("/reader", readerRoutes);
 
 //Upload API
 //decide where to storage

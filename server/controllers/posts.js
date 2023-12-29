@@ -10,17 +10,17 @@ export const getPosts = (req, res) => {
   if (req.query.category && title) {
     // Search by both category and partial title match (case-insensitive)
     q =
-      "SELECT * FROM posts WHERE category = ? AND LOWER(title) LIKE LOWER(?) AND status=? ORDER BY created_at DESC";
+      "SELECT * FROM posts WHERE category = ? AND LOWER(title) LIKE LOWER(?) AND status=? ORDER BY updated_at DESC";
     queryParams = [req.query.category, `%${title}%`, "publish"]; // Use '%' as wildcard for partial match
   } else if (req.query.category) {
     // Search only by category
     q =
-      "SELECT * FROM posts WHERE category = ? AND status=? ORDER BY created_at DESC";
+      "SELECT * FROM posts WHERE category = ? AND status=? ORDER BY updated_at DESC";
     queryParams = [req.query.category, "publish"];
   } else if (title) {
     // Search only by partial title match (case-insensitive)
     q =
-      "SELECT * FROM posts WHERE LOWER(title) LIKE LOWER(?) AND status=? ORDER BY created_at DESC";
+      "SELECT * FROM posts WHERE LOWER(title) LIKE LOWER(?) AND status=? ORDER BY updated_at DESC";
     queryParams = [`%${title}%`, "publish"]; // Use '%' as wildcard for partial match
   } else {
     // Retrieve all posts if no category or title specified
