@@ -14,7 +14,6 @@ export const AuthContextProvider = ({ children }) => {
       "http://localhost:8800/auth/loginWriter",
       inputs
     );
-
     setCurrentUser(res.data.other);
     console.log(res);
     const jwtToken = res.data.token;

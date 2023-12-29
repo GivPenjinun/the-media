@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Register = () => {
+  const [role, setRole] = useState("");
   const [errors, setErrors] = useState({});
   const [inputs, setInputs] = useState({
     username: "",
@@ -42,14 +43,24 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //if (validateForm()){}
-    try {
-      await axios.post("http://localhost:8800/auth/registerWriter", inputs);
-      navigate("/login");
-    } catch (err) {
-      err.response.data &&
-        setErrors((prev) => ({ ...prev, err: err.response.data }));
-      console.log(err);
+    if (validateForm()) {
+      try {
+        if (role == "writer") {
+          await axios.post("http://localhost:8800/auth/registerWriter", inputs);
+          navigate("/login");
+        }
+        if (role == "reader") {
+          await axios.post("http://localhost:8800/auth/registerReader", inputs);
+          navigate("/login");
+        }
+        if (role == "") {
+          alert("please choose role");
+        }
+      } catch (err) {
+        err.response.data &&
+          setErrors((prev) => ({ ...prev, err: err.response.data }));
+        console.log(err);
+      }
     }
   };
   return (
@@ -89,7 +100,37 @@ const Register = () => {
         {errors.password && (
           <p className="mt-2 text-sm text-red-600">{errors.password}</p>
         )}
-        {/*<input type="file" required />*/}
+        <div className="flex  gap-3">
+          <h1>Role:</h1>
+          <div className="flex items-center gap-1">
+            <input
+              id="writer"
+              type="radio"
+              name="role"
+              value="writer"
+              onClick={(e) => {
+                setRole(e.target.value);
+                console.log(role);
+              }}
+              className="form-checkbox h-4 w-4"
+            />
+            <label htmlFor="writer">Writer</label>
+          </div>
+          <div className="flex items-center gap-1">
+            <input
+              id="reder"
+              type="radio"
+              name="role"
+              value="reader"
+              onClick={(e) => {
+                setRole(e.target.value);
+                console.log(role);
+              }}
+              className="form-checkbox h-4 w-4"
+            />
+            <label htmlFor="reder">Reader</label>
+          </div>
+        </div>
         <div className="">
           <button
             onClick={handleSubmit}

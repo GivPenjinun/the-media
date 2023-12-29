@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 
 const Login = () => {
+  const [role, setRole] = useState("");
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -19,9 +20,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      //await axios.post("http://localhost:8800/auth/loginWriter", inputs);
-      await loginWriter(inputs);
-      navigate("/");
+      if (role == "writer") {
+        await loginWriter(inputs);
+        navigate("/");
+      }
+      if (role == "reader") {
+        //await loginReader(inputs);
+        navigate("/");
+      }
+      if (role == "") {
+        alert("please choose role");
+      }
     } catch (err) {
       setError(err.response.data);
     }
@@ -46,6 +55,38 @@ const Login = () => {
           name="password"
           onChange={handleChange}
         />
+        <div className="flex  gap-3">
+          <h1>Role:</h1>
+          <div className="flex items-center gap-1">
+            <input
+              id="writer"
+              type="radio"
+              name="role"
+              value="writer"
+              onClick={(e) => {
+                setRole(e.target.value);
+                console.log(role);
+              }}
+              className="form-checkbox h-4 w-4"
+            />
+            <label htmlFor="writer">Writer</label>
+          </div>
+          <div className="flex items-center gap-1">
+            <input
+              id="reder"
+              type="radio"
+              name="role"
+              value="reader"
+              onClick={(e) => {
+                setRole(e.target.value);
+                console.log(role);
+              }}
+              className="form-checkbox h-4 w-4"
+            />
+            <label htmlFor="reder">Reader</label>
+          </div>
+        </div>
+
         <button
           onClick={handleSubmit}
           type="submit"
