@@ -17,6 +17,7 @@ const NavBar = () => {
     logout();
     navigate("/");
   };
+  //console.log(currentUser);
   return (
     <>
       <nav className="py-5 px-10 flex justify-between items-center">

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
   const [role, setRole] = useState("");
@@ -10,7 +11,8 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState(null);
-  const { loginWriter } = useContext(AuthContext);
+  //const { loginReader } = useAuth();
+  const { loginWriter, loginReader } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,14 +27,15 @@ const Login = () => {
         navigate("/");
       }
       if (role == "reader") {
-        //await loginReader(inputs);
+        await loginReader(inputs);
         navigate("/");
       }
       if (role == "") {
         alert("please choose role");
       }
-    } catch (err) {
-      setError(err.response.data);
+    } catch (error) {
+      //setError(err.response.data);
+      console.log("Response data:", error.response.data);
     }
   };
   return (
@@ -65,7 +68,6 @@ const Login = () => {
               value="writer"
               onClick={(e) => {
                 setRole(e.target.value);
-                console.log(role);
               }}
               className="form-checkbox h-4 w-4"
             />
@@ -79,7 +81,6 @@ const Login = () => {
               value="reader"
               onClick={(e) => {
                 setRole(e.target.value);
-                console.log(role);
               }}
               className="form-checkbox h-4 w-4"
             />

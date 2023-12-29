@@ -17,9 +17,11 @@ function jwtInterceptor() {
   });
 
   axios.interceptors.response.use(
+    //The success handler is not modifying the response
     (req) => {
       return req;
     },
+    //the error handler
     (error) => {
       if (
         error.response.status === 401 &&

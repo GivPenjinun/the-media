@@ -8,13 +8,12 @@ const HomeContent = () => {
   const [posts, setPosts] = useState([]);
   //to access currnt url param
   const search = useLocation().search;
-  console.log(search);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`http://localhost:8800/posts${search}`);
         setPosts(res.data);
-        console.log(res.data);
+        //console.log(res.data);
       } catch (err) {
         console.log(err);
       }
