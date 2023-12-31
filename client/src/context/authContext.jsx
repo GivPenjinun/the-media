@@ -1,16 +1,19 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(localStorage.getItem("user")) || null
   );
   const [role, setRole] = useState(
     currentUser?.writer_id ? "writer" : currentUser?.reader_id ? "reader" : null
   );
+  const [error, setError] = useState(null);
 
   const loginWriter = async (inputs) => {
     try {
@@ -27,20 +30,37 @@ export const AuthContextProvider = ({ children }) => {
         { expires: 1 / 24 },
         { httpOnly: true }
       );
+      if (res.request.status == 200) {
+        navigate("/");
+      }
     } catch (error) {
-      console.log("Response data:", error.response.data);
+      error?.response?.data && setError(error?.response?.data);
+      console.log("Response data:", error?.response?.data);
     }
   };
 
   const loginReader = async (inputs) => {
-    const res = await axios.post(
-      "http://localhost:8800/auth/loginReader",
-      inputs
-    );
-    setCurrentUser(res.data.other);
-    //console.log(res);
-    const jwtToken = res.data.token;
-    Cookies.set("authToken", jwtToken, { expires: 1 / 24 }, { httpOnly: true });
+    try {
+      const res = await axios.post(
+        "http://localhost:8800/auth/loginReader",
+        inputs
+      );
+      setCurrentUser(res.data.other);
+      //console.log(res);
+      const jwtToken = res.data.token;
+      Cookies.set(
+        "authToken",
+        jwtToken,
+        { expires: 1 / 24 },
+        { httpOnly: true }
+      );
+      if (res.request.status == 200) {
+        navigate("/");
+      }
+    } catch (error) {
+      error?.response?.data && setError(error?.response?.data);
+      console.log("Response data:", error?.response?.data);
+    }
   };
 
   const logout = async (inputs) => {
@@ -66,7 +86,7 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, loginWriter, logout, role, loginReader }}
+      value={{ currentUser, loginWriter, logout, role, loginReader, error }}
     >
       {children}
     </AuthContext.Provider>

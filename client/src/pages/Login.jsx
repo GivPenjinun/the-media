@@ -10,9 +10,9 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState(null);
+  //const [error, setError] = useState(null);
   //const { loginReader } = useAuth();
-  const { loginWriter, loginReader } = useContext(AuthContext);
+  const { loginWriter, loginReader, error } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -24,18 +24,18 @@ const Login = () => {
     try {
       if (role == "writer") {
         await loginWriter(inputs);
-        navigate("/");
       }
       if (role == "reader") {
         await loginReader(inputs);
-        navigate("/");
       }
       if (role == "") {
         alert("please choose role");
       }
-    } catch (error) {
-      //setError(err.response.data);
-      console.log("Response data:", error.response.data);
+    } catch (err) {
+      if (err?.response?.data) {
+        setError(err?.response?.data);
+      }
+      console.log(err);
     }
   };
   return (

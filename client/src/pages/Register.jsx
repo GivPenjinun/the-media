@@ -57,8 +57,8 @@ const Register = () => {
           alert("please choose role");
         }
       } catch (err) {
-        err.response.data &&
-          setErrors((prev) => ({ ...prev, err: err.response.data }));
+        err?.response?.data &&
+          setErrors((prev) => ({ ...prev, err: err?.response?.data }));
         console.log(err);
       }
     }
@@ -110,7 +110,6 @@ const Register = () => {
               value="writer"
               onClick={(e) => {
                 setRole(e.target.value);
-                console.log(role);
               }}
               className="form-checkbox h-4 w-4"
             />
@@ -124,7 +123,6 @@ const Register = () => {
               value="reader"
               onClick={(e) => {
                 setRole(e.target.value);
-                console.log(role);
               }}
               className="form-checkbox h-4 w-4"
             />

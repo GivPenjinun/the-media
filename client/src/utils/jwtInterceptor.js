@@ -32,6 +32,8 @@ function jwtInterceptor() {
         localStorage.removeItem("user");
         window.location.replace("/login");
       }
+      // Pass the error to the next handler
+      return Promise.reject(error);
     }
   );
 }
