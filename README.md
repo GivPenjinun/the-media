@@ -16,6 +16,7 @@ Server: Node.js, Express, MySQL, and JWT Authentication
 
 Search for posts filtered by category and title
 
+
 ### As writers :
 
 JWT Authentication
@@ -26,9 +27,6 @@ CRUD (Create, Read, Update, Delete) posts
 
 Upload image to post
 
-View other posts
-
-CRUD (Create, Read, Update, Delete) favorite users
 
 ### As readers :
 
