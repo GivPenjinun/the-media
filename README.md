@@ -12,13 +12,13 @@ Server: Node.js, Express, MySQL, and JWT Authentication
 ---
 ## Features
 
-### public :
+### Public :
 
 Search for posts filtered by category and title
 
 ### As writers :
 
-Firebase Authentication 
+JWT Authentication
 
 Create a profile and upload a profile image
 
