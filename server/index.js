@@ -7,7 +7,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
 import "dotenv/config";
-const PORT = process.env.PORT ?? 8800;
+const PORT = process.env.PORT || 8800;
 
 const app = express();
 //to use middleware for all API
@@ -39,6 +39,14 @@ app.post("/uploadImage", upload.single("image"), function (req, res) {
   const file = req.file;
 
   res.status(200).json(file.filename);
+});
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.get("*", (req, res) => {
+  res.status(404).send("Not found");
 });
 
 app.listen(PORT, () => {
