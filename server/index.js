@@ -7,6 +7,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
 import "dotenv/config";
+const PORT = process.env.PORT ?? 8800;
 
 const app = express();
 //to use middleware for all API
@@ -40,6 +41,6 @@ app.post("/uploadImage", upload.single("image"), function (req, res) {
   res.status(200).json(file.filename);
 });
 
-app.listen(8800, () => {
-  console.log("connected");
+app.listen(PORT, () => {
+  console.log("Server is running on PORT", PORT);
 });
