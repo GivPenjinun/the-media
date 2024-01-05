@@ -6,6 +6,7 @@ import readerRoutes from "./routes/readers.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
+import "dotenv/config";
 
 const app = express();
 //to use middleware for all API

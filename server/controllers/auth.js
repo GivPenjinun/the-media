@@ -52,9 +52,13 @@ export const loginWriter = (req, res) => {
       if (!isPasswordCorrect)
         return res.status(400).json("Wrong username or password!");
       //Note: should use SECRETKEY instead of "jwtkey"
-      const token = jwt.sign({ id: data[0].writer_id }, "jwtkey", {
-        expiresIn: "1hr",
-      });
+      const token = jwt.sign(
+        { id: data[0].writer_id },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "1hr",
+        }
+      );
 
       //For not sending password with json
       const { password, email, image, ...other } = data[0];
@@ -125,9 +129,13 @@ export const loginReader = (req, res) => {
       if (!isPasswordCorrect)
         return res.status(400).json("Wrong username or password!");
       //Note: should use SECRETKEY instead of "jwtkey"
-      const token = jwt.sign({ id: data[0].reader_id }, "jwtkey", {
-        expiresIn: "1hr",
-      });
+      const token = jwt.sign(
+        { id: data[0].reader_id },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "1hr",
+        }
+      );
 
       //For not sending password with json
       const { password, email, image, ...other } = data[0];
